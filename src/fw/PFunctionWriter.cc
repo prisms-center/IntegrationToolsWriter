@@ -822,30 +822,50 @@ namespace PRISMS
         sout << indent(I) << _name + "(const " + _name + " &RHS )\n";
         sout << indent(I) << "{\n";
         I++;
-        sout << indent(I) << "construct();\n";
-        I--;
-        sout << indent(I) << "}\n\n";
-        
-        // write assignment operator
-        sout << indent(I) << _name + "& operator=(const " + _name + " &RHS )\n";
-        sout << indent(I) << "{\n";
-        I++;
+        sout << indent(I) << "construct(false);\n";
+        sout << indent(I) << "\n";
         if( _write_f)
         {
-            sout << indent(I) << "_val = RHS._val;\n";
+            sout << indent(I) << "_val = RHS._val->clone();\n";
         }
         if( _write_grad)
         {
-            sout << indent(I) << "\n";
             for( int i=0; i<_var_name.size(); i++)
-                sout << indent(I) << "_grad_val[" + itos(i) + "] = RHS._grad_val[" + itos(i) + "];\n";
+                sout << indent(I) << "_grad_val[" + itos(i) + "] = RHS._grad_val[" + itos(i) + "]->clone();\n";
         }
         if( _write_hess)
         {
             for( int i=0; i<_var_name.size(); i++)
             for( int j=0; j<_var_name.size(); j++)
-                sout << indent(I) << "_hess_val[" + itos(i) + "][" + itos(j) + "] = RHS._hess_val[" + itos(i) + "][" + itos(j) + "];\n";
+                sout << indent(I) << "_hess_val[" + itos(i) + "][" + itos(j) + "] = RHS._hess_val[" + itos(i) + "][" + itos(j) + "]->clone();\n";
         }
+        sout << indent(I) << "\n";
+        I--;
+        sout << indent(I) << "}\n\n";
+        
+        // write assignment operator
+        sout << indent(I) << _name + "& operator=( " + _name + " RHS )\n";
+        sout << indent(I) << "{\n";
+        I++;
+        sout << indent(I) << "using std::swap;\n";
+        sout << indent(I) << "\n";
+        if( _write_f)
+        {
+            sout << indent(I) << "swap(_val, RHS._val);\n";
+        }
+        if( _write_grad)
+        {
+            for( int i=0; i<_var_name.size(); i++)
+                sout << indent(I) << "swap(_grad_val[" + itos(i) + "], RHS._grad_val[" + itos(i) + "]);\n";
+        }
+        if( _write_hess)
+        {
+            for( int i=0; i<_var_name.size(); i++)
+            for( int j=0; j<_var_name.size(); j++)
+                sout << indent(I) << "swap(_hess_val[" + itos(i) + "][" + itos(j) + "], RHS._hess_val[" + itos(i) + "][" + itos(j) + "]);\n";
+        }
+        sout << indent(I) << "\n";
+        sout << indent(I) << "return *this;\n";
         I--;
         sout << indent(I) << "}\n\n";
         
@@ -1017,7 +1037,7 @@ namespace PRISMS
         I--;
         sout << indent(I) << "private:\n";
         I++;
-        sout << indent(I) << "void construct()\n";
+        sout << indent(I) << "void construct(bool allocate = true)\n";
         sout << indent(I) << "{\n";
         I++;
         
@@ -1028,6 +1048,23 @@ namespace PRISMS
         sout << indent(I) << "this->_var_description.clear();\n";
         for( int i=0; i<_var_description.size(); i++)
             sout << indent(I) << "this->_var_description.push_back(\"" + _var_description[i] + "\");\n";
+        
+        if( _write_grad)
+        {
+            sout << indent(I) << "\n";
+            sout << indent(I) << "_grad_val = new " + PSimpleBaseTemplate + "*[" + itos(_var_name.size()) + "];\n";
+        }
+        if( _write_hess)
+        {
+            sout << indent(I) << "\n";
+            sout << indent(I) << "_hess_val = new " + PSimpleBaseTemplate + "**[" + itos(_var_name.size()) + "];\n";
+            for( int i=0; i<_var_name.size(); i++)
+                sout << indent(I) << "_hess_val[" + itos(i) + "] = new " + PSimpleBaseTemplate + "*[" + itos(_var_name.size()) + "];\n";
+        }
+        
+        sout << indent(I) << "\n";
+        sout << indent(I) << "if(!allocate) return;\n";
+        
         if( _write_f)
         {
             sout << indent(I) << "\n";
@@ -1036,16 +1073,12 @@ namespace PRISMS
         if( _write_grad)
         {
             sout << indent(I) << "\n";
-            sout << indent(I) << "_grad_val = new " + PSimpleBaseTemplate + "*[" + itos(_var_name.size()) + "];\n";
             for( int i=0; i<_var_name.size(); i++)
                 sout << indent(I) << "_grad_val[" + itos(i) + "] = new " +_name + "_grad_" + itos(i) + instringtemp + "();\n";
         }
         if( _write_hess)
         {
             sout << indent(I) << "\n";
-            sout << indent(I) << "_hess_val = new " + PSimpleBaseTemplate + "**[" + itos(_var_name.size()) + "];\n";
-            for( int i=0; i<_var_name.size(); i++)
-                sout << indent(I) << "_hess_val[" + itos(i) + "] = new " + PSimpleBaseTemplate + "*[" + itos(_var_name.size()) + "];\n";
             for( int i=0; i<_var_name.size(); i++)
             for( int j=0; j<_var_name.size(); j++)
                 sout << indent(I) << "_hess_val[" + itos(i) + "][" + itos(j) + "] = new " +_name + "_hess_" + itos(i) + "_" + itos(j) + instringtemp + "();\n";
