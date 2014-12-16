@@ -743,6 +743,8 @@ namespace PRISMS
         // write members
         sout << indent(I) << "public:\n";
         I++;
+        sout << indent(I) << "\n";
+        sout << indent(I) << "typedef " + PBasisSetBaseTemplate + "::size_type size_type;\n";
         //sout << indent(I) << "using " + PBasisSetBaseTemplate + "::_name;\n";
         //sout << indent(I) << "using " + PBasisSetBaseTemplate + "::_description;\n";
         //sout << indent(I) << "using " + PBasisSetBaseTemplate + "::_val;\n";
@@ -757,7 +759,7 @@ namespace PRISMS
         
         
         // write constructor
-        sout << indent(I) << _name + "(int N) : " + PBasisSetBaseTemplate + "(N)\n";
+        sout << indent(I) << _name + "(size_type N) : " + PBasisSetBaseTemplate + "(N)\n";
         sout << indent(I) << "{\n";
         I++;
         sout << indent(I) << "construct(N);\n";
@@ -807,10 +809,10 @@ namespace PRISMS
         
         
         // write     PFunction<InType, OutType> basis_function(term) const
-        sout << indent(I) << PFunctionTemplate + " basis_function( int term) const\n";
+        sout << indent(I) << PFunctionTemplate + " basis_function( size_type term) const\n";
         sout << indent(I) << "{\n";
         I++;
-        sout << indent(I) << "if(term >= max_size()){ std::cout << \"Error in " + _name + "::basis_function( int term). term >= max_size().\" << std::endl; exit(1);}\n\n";
+        sout << indent(I) << "if(term >= max_size()){ std::cout << \"Error in " + _name + "::basis_function( size_type term). term >= max_size().\" << std::endl; exit(1);}\n\n";
         
         sout << indent(I) << "std::string name;\n";
         sout << indent(I) << "std::vector< std::string> var_name(1, \"x\");\n";
@@ -850,11 +852,11 @@ namespace PRISMS
         sout << indent(I) << "}\n\n";
         
         /*
-        // write     PSimpleFunction<InType, OutType>* clone_basis_function( int term)
-        sout << indent(I) << PSimpleBaseTemplate + "* clone_basis_function( int term)\n";
+        // write     PSimpleFunction<InType, OutType>* clone_basis_function( size_type term)
+        sout << indent(I) << PSimpleBaseTemplate + "* clone_basis_function( size_type term)\n";
         sout << indent(I) << "{\n";
         I++;
-        sout << indent(I) << "if(term >= max_size()){ std::cout << \"Error in " + _name + "::clone_basis_function( int term). term >= max_size().\" << std::endl; exit(1);}\n";
+        sout << indent(I) << "if(term >= max_size()){ std::cout << \"Error in " + _name + "::clone_basis_function( size_type term). term >= max_size().\" << std::endl; exit(1);}\n";
         sout << indent(I) << "switch( term )\n";
         sout << indent(I) << "{\n";
         I++;
@@ -868,11 +870,11 @@ namespace PRISMS
         sout << indent(I) << "}\n\n";
         
         
-        // write     PSimpleFunction<InType, OutType>* clone_basis_grad_function( int term)
-        sout << indent(I) << PSimpleBaseTemplate + "* clone_grad_basis_function( int term)\n";
+        // write     PSimpleFunction<InType, OutType>* clone_basis_grad_function( size_type term)
+        sout << indent(I) << PSimpleBaseTemplate + "* clone_grad_basis_function( size_type term)\n";
         sout << indent(I) << "{\n";
         I++;
-        sout << indent(I) << "if(term >= max_size()){ std::cout << \"Error in " + _name + "::clone_grad_basis_function( int term). term >= max_size().\" << std::endl; exit(1);}\n";
+        sout << indent(I) << "if(term >= max_size()){ std::cout << \"Error in " + _name + "::clone_grad_basis_function( size_type term). term >= max_size().\" << std::endl; exit(1);}\n";
         sout << indent(I) << "switch( term )\n";
         sout << indent(I) << "{\n";
         I++;
@@ -886,11 +888,11 @@ namespace PRISMS
         sout << indent(I) << "}\n\n";
         
         
-        // write      PSimpleFunction<InType, OutType>* clone_basis_hess_function( int term)
-        sout << indent(I) << PSimpleBaseTemplate + "* clone_hess_basis_function( int term)\n";
+        // write      PSimpleFunction<InType, OutType>* clone_basis_hess_function( size_type term)
+        sout << indent(I) << PSimpleBaseTemplate + "* clone_hess_basis_function( size_type term)\n";
         sout << indent(I) << "{\n";
         I++;
-        sout << indent(I) << "if(term >= max_size()){ std::cout << \"Error in " + _name + "::clone_hess_basis_function( int term). term >= max_size().\" << std::endl; exit(1);}\n";
+        sout << indent(I) << "if(term >= max_size()){ std::cout << \"Error in " + _name + "::clone_hess_basis_function( size_type term). term >= max_size().\" << std::endl; exit(1);}\n";
         sout << indent(I) << "switch( term )\n";
         sout << indent(I) << "{\n";
         I++;
@@ -905,7 +907,7 @@ namespace PRISMS
         */
         
         // write max_size
-        sout << indent(I) << "int max_size() const\n";
+        sout << indent(I) << "size_type max_size() const\n";
         sout << indent(I) << "{\n";
         I++;
         sout << indent(I) << "return " << _phi.size() << ";\n";
@@ -914,7 +916,7 @@ namespace PRISMS
         
         
         // write resize
-        sout << indent(I) << "void resize(int N) \n";
+        sout << indent(I) << "void resize(size_type N) \n";
         sout << indent(I) << "{\n";
         I++;
         sout << indent(I) << _name + " tmp(*this);\n";
@@ -934,7 +936,7 @@ namespace PRISMS
         
         
         // write eval
-        sout << indent(I) << _outtype + " eval(int term, const " + _intype + " &var)\n";
+        sout << indent(I) << _outtype + " eval(size_type term, const " + _intype + " &var)\n";
         sout << indent(I) << "{\n";
         I++;
         sout << indent(I) << "return _basis_function[term](var);\n";
@@ -942,7 +944,7 @@ namespace PRISMS
         sout << indent(I) << "}\n\n";
         
         // write eval_grad
-        sout << indent(I) << _outtype + " eval_grad(int term, const " + _intype + " &var)\n";
+        sout << indent(I) << _outtype + " eval_grad(size_type term, const " + _intype + " &var)\n";
         sout << indent(I) << "{\n";
         I++;
         sout << indent(I) << "return _basis_function[term].grad(var, 0);\n";
@@ -950,7 +952,7 @@ namespace PRISMS
         sout << indent(I) << "}\n\n";
         
         // write eval_hess
-        sout << indent(I) << _outtype + " eval_hess(int term, const " + _intype + " &var)\n";
+        sout << indent(I) << _outtype + " eval_hess(size_type term, const " + _intype + " &var)\n";
         sout << indent(I) << "{\n";
         I++;
         sout << indent(I) << "return _basis_function[term].hess(var, 0, 0);\n";

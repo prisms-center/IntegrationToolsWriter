@@ -804,6 +804,7 @@ namespace PRISMS
         //sout << indent(I) << "using " + PFuncBaseTemplate + "::_var_name;\n";
         //sout << indent(I) << "using " + PFuncBaseTemplate + "::_var_description;\n";
         sout << indent(I) << "\n";
+        sout << indent(I) << "typedef typename " << PFuncBaseTemplate << "::size_type size_type;\n\n";
         sout << indent(I) << PSimpleBaseTemplate + " *_val;\n";
         sout << indent(I) << PSimpleBaseTemplate + " **_grad_val;\n";
         sout << indent(I) << PSimpleBaseTemplate + " ***_hess_val;\n";
@@ -918,7 +919,7 @@ namespace PRISMS
         
         if( _write_grad)
         {
-        sout << indent(I) << PSimpleFunctionTemplate + " grad_simplefunction(int di) const\n";
+        sout << indent(I) << PSimpleFunctionTemplate + " grad_simplefunction(size_type di) const\n";
         sout << indent(I) << "{\n";
         I++;
         sout << indent(I) << "return " + PSimpleFunctionTemplate + "( *_grad_val[di] );\n";
@@ -928,7 +929,7 @@ namespace PRISMS
         
         if( _write_hess)
         {
-        sout << indent(I) << PSimpleFunctionTemplate + " hess_simplefunction(int di, int dj) const\n";
+        sout << indent(I) << PSimpleFunctionTemplate + " hess_simplefunction(size_type di, size_type dj) const\n";
         sout << indent(I) << "{\n";
         I++;
         sout << indent(I) << "return " + PSimpleFunctionTemplate + "( *_hess_val[di][dj] );\n";
@@ -950,7 +951,7 @@ namespace PRISMS
         
         if( _write_grad)
         {
-        sout << indent(I) << _outtype + " grad(const " + instring + " &var, int di)\n";
+        sout << indent(I) << _outtype + " grad(const " + instring + " &var, size_type di)\n";
         sout << indent(I) << "{\n";
         I++;
         sout << indent(I) << "return (*_grad_val[di])(var);\n";
@@ -960,7 +961,7 @@ namespace PRISMS
         
         if( _write_hess)
         {
-        sout << indent(I) << _outtype + " hess(const " + instring + " &var, int di, int dj)\n";
+        sout << indent(I) << _outtype + " hess(const " + instring + " &var, size_type di, size_type dj)\n";
         sout << indent(I) << "{\n";
         I++;
         sout << indent(I) << "return (*_hess_val[di][dj])(var);\n";
@@ -1015,7 +1016,7 @@ namespace PRISMS
         
         if( _write_grad)
         {
-        sout << indent(I) << _outtype + " grad(int di) const\n";
+        sout << indent(I) << _outtype + " grad(size_type di) const\n";
         sout << indent(I) << "{\n";
         I++;
         sout << indent(I) << "return (*_grad_val[di])();\n";
@@ -1025,7 +1026,7 @@ namespace PRISMS
         
         if( _write_hess)
         {
-        sout << indent(I) << _outtype + " hess(int di, int dj) const\n";
+        sout << indent(I) << _outtype + " hess(size_type di, size_type dj) const\n";
         sout << indent(I) << "{\n";
         I++;
         sout << indent(I) << "return (*_hess_val[di][dj])();\n";
@@ -1142,6 +1143,7 @@ namespace PRISMS
         // write members
         sout << indent(I) << "public:\n";
         I++;
+        sout << indent(I) << "typedef typename " << PFuncBaseTemplate << "::size_type size_type;\n\n";
         sout << indent(I) << "using " + PFuncBaseTemplate + "::_name;\n";
         sout << indent(I) << "using " + PFuncBaseTemplate + "::_var_name;\n";
         sout << indent(I) << "using " + PFuncBaseTemplate + "::_var_description;\n";
@@ -1234,7 +1236,7 @@ namespace PRISMS
         
         if( _write_grad)
         {
-        sout << indent(I) << PSimpleFunctionTemplate + " grad_simplefunction(int di) const\n";
+        sout << indent(I) << PSimpleFunctionTemplate + " grad_simplefunction(size_type di) const\n";
         sout << indent(I) << "{\n";
         I++;
         for( int i=0; i<_var_name.size(); i++)
@@ -1255,7 +1257,7 @@ namespace PRISMS
         
         if( _write_hess)
         {
-        sout << indent(I) << PSimpleFunctionTemplate + " hess_simplefunction(int di, int dj) const\n";
+        sout << indent(I) << PSimpleFunctionTemplate + " hess_simplefunction(size_type di, size_type dj) const\n";
         sout << indent(I) << "{\n";
         I++;
         for( int i=0; i<_var_name.size(); i++)
@@ -1298,7 +1300,7 @@ namespace PRISMS
         
         if( _write_grad)
         {
-        sout << indent(I) << _outtype + " grad(const " + instring + " &var, int di)\n";
+        sout << indent(I) << _outtype + " grad(const " + instring + " &var, size_type di)\n";
         sout << indent(I) << "{\n";
         I++;
         for( int i=0; i<_var_name.size(); i++)
@@ -1319,7 +1321,7 @@ namespace PRISMS
         
         if( _write_hess)
         {
-        sout << indent(I) << _outtype + " hess(const " + instring + " &var, int di, int dj)\n";
+        sout << indent(I) << _outtype + " hess(const " + instring + " &var, size_type di, size_type dj)\n";
         sout << indent(I) << "{\n";
         I++;
         for( int i=0; i<_var_name.size(); i++)
@@ -1396,7 +1398,7 @@ namespace PRISMS
         
         if( _write_grad)
         {
-        sout << indent(I) << _outtype + " grad(int di) const\n";
+        sout << indent(I) << _outtype + " grad(size_type di) const\n";
         sout << indent(I) << "{\n";
         I++;
         sout << indent(I) << "return _grad_val[di];\n";
@@ -1406,7 +1408,7 @@ namespace PRISMS
         
         if( _write_hess)
         {
-        sout << indent(I) << _outtype + " hess(int di, int dj) const\n";
+        sout << indent(I) << _outtype + " hess(size_type di, size_type dj) const\n";
         sout << indent(I) << "{\n";
         I++;
         sout << indent(I) << "return _hess_val[di][dj];\n";
