@@ -61,6 +61,7 @@ This directory contains the IntegrationToolsWriter code developed
 by the PRISMS Center at the University of Michigan, Ann Arbor, USA.
 
 (c) 2014 The Regents of the University of Michigan
+
 PRISMS Center http://prisms.engin.umich.edu 
 
 This program is free software; you can redistribute it and/or modify
