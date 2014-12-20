@@ -5,4 +5,3 @@ test:
 
 clean: 
 	cd commandline && $(MAKE) clean
-	cd testlib && $(MAKE) clean

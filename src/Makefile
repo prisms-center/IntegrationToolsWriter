@@ -1,11 +1,9 @@
 # make command line interface programs: fs, bsw
 
 
-VERS = "develop"
-ID="id"
-URL="url"
-#ID=$$(git rev-parse HEAD)
-#URL=$$(git config --get remote.origin.url)
+VERS=$$(git rev-parse --abbrev-ref HEAD)
+ID=$$(git rev-parse HEAD)
+URL=$$(git config --get remote.origin.url)
 
 
 CXX      = g++

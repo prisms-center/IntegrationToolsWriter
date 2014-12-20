@@ -1,7 +1,7 @@
 # make PFunction src
 
 HOME = ../..
-PLIB = $(HOME)/tests/testlib
+PLIB = .
 FW = $(HOME)/src/fw/fw
 BSW = $(HOME)/src/bsw/bsw
 
@@ -25,4 +25,4 @@ $(PLIB)/libpextern.so:
 FORCE:
 
 clean: 
-	rm -f $(PLIB)/MyFunc.hh $(PLIB)/MyPieceWiseFunc.hh $(PLIB)/Monomial.hh $(PLIB)/Chebyshev.hh $(PLIB)/libpextern.so
+	rm -f $(PLIB)/*.o $(PLIB)/*.so $(PLIB)/*.hh $(PLIB)/*.cc
